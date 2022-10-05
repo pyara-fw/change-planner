@@ -1,0 +1,68 @@
+version: "3"
+
+services: 
+
+    # Session storage
+    redis:
+        build: 
+            context: _docker_/redis
+            dockerfile: Dockerfile
+
+
+    # Dev container
+    app.pyara.com:
+        build: 
+            context: .
+            dockerfile: _docker_/nginx/Dockerfile
+        restart: unless-stopped
+        ports:
+        - ${BACKEND_PORT}:8080
+        depends_on:
+            - backend
+        volumes: 
+            - "./backend-src:/srv"
+        env_file: 
+            - .env
+
+    # Dev container
+    backend:
+        build: 
+            context: . 
+            dockerfile: _docker_/backend/Dockerfile
+        restart: unless-stopped            
+        volumes: 
+            - "./backend-src:/srv"
+        depends_on:
+            - redis
+            - db
+        env_file: 
+            - .env
+
+
+    # Web client to access container 'redis'
+    # When in production, should be removed
+    redis-ui:
+        image: marian/rebrow
+        ports: 
+            - "${REDIS_UI_PORT}:5001"
+        depends_on: 
+            - redis
+
+
+    db:
+        image: mariadb:10.7
+        restart: unless-stopped
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_USER: ${DB_USERNAME}
+        volumes:
+            - ./var/mysql:/docker-entrypoint-initdb.d
+    
+    db-ui:
+        image: adminer
+        ports:
+            - ${DB_UI_PORT}:8080
+        depends_on:
+            - db 
