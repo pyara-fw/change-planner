@@ -29,15 +29,14 @@ class ChangeRequest extends Model
 
     public function assigned_to()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo('App\Models\User', 'assigned_user_id', 'id');
     }
     public function reported_by()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo('App\Models\User', 'reporter_user_id', 'id');
     }
     public function project()
     {
         return $this->belongsTo('App\Models\Project');
     }
-    
 }

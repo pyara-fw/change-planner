@@ -7,9 +7,9 @@
 
             <div class="col-md-9">
                 <div class="card">
-                    <div class="card-header">Changerequest</div>
+                    <div class="card-header">Change Request</div>
                     <div class="card-body">
-                        <a href="{{ url('/admin/change-request/create') }}" class="btn btn-success btn-sm" title="Add New ChangeRequest">
+                        <a href="{{ url('/admin/change-request/create') }}" class="btn btn-success btn-sm" title="Add New Change Request">
                             <i class="fa fa-plus" aria-hidden="true"></i> Add New
                         </a>
 
@@ -30,14 +30,21 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>#</th><th>Title</th><th>Description</th><th>Project Id</th><th>Actions</th>
+                                        <th>#</th><th>Title</th>
+                                        <th>Project</th>
+                                        <th>Assigned to</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($changerequest as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $item->title }}</td><td>{{ $item->description }}</td><td>{{ $item->project_id }}</td>
+                                        <td>{{ $item->title }}</td>
+                                        <td>{{ $item->project->title }}</td>
+                                        <td>{{ $item->assigned_to->name }}</td>
+                                        <td>{{ $item->status }}</td>
                                         <td>
                                             <a href="{{ url('/admin/change-request/' . $item->id) }}" title="View ChangeRequest"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> View</button></a>
                                             <a href="{{ url('/admin/change-request/' . $item->id . '/edit') }}" title="Edit ChangeRequest"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
@@ -45,7 +52,7 @@
                                             <form method="POST" action="{{ url('/admin/change-request' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
                                                 {{ method_field('DELETE') }}
                                                 {{ csrf_field() }}
-                                                <button type="submit" class="btn btn-danger btn-sm" title="Delete ChangeRequest" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
+                                                <button type="submit" class="btn btn-danger btn-sm" title="Delete ChangeRequest" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i> Del</button>
                                             </form>
                                         </td>
                                     </tr>

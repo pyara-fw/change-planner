@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 
 use App\Models\ChangeRequest;
+use App\Models\Project;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ChangeRequestController extends Controller
@@ -42,7 +44,11 @@ class ChangeRequestController extends Controller
      */
     public function create()
     {
-        return view('admin.change-request.create');
+        $data = [];
+        $data['list_users'] = User::all();
+        $data['list_projects'] = Project::all();
+
+        return view('admin.change-request.create', $data);
     }
 
     /**
@@ -55,12 +61,12 @@ class ChangeRequestController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-			'title' => 'required|max:10',
-			'project_id' => 'required',
-			'status' => 'required'
-		]);
+            'title' => 'required',
+            'project_id' => 'required',
+            'status' => 'required'
+        ]);
         $requestData = $request->all();
-        
+
         ChangeRequest::create($requestData);
 
         return redirect('admin/change-request')->with('flash_message', 'ChangeRequest added!');
@@ -77,6 +83,7 @@ class ChangeRequestController extends Controller
     {
         $changerequest = ChangeRequest::findOrFail($id);
 
+        // dd($changerequest->reportedBy);
         return view('admin.change-request.show', compact('changerequest'));
     }
 
@@ -90,8 +97,11 @@ class ChangeRequestController extends Controller
     public function edit($id)
     {
         $changerequest = ChangeRequest::findOrFail($id);
+        $data = compact('changerequest');
+        $data['list_users'] = User::all();
+        $data['list_projects'] = Project::all();
 
-        return view('admin.change-request.edit', compact('changerequest'));
+        return view('admin.change-request.edit', $data);
     }
 
     /**
@@ -105,12 +115,12 @@ class ChangeRequestController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-			'title' => 'required|max:10',
-			'project_id' => 'required',
-			'status' => 'required'
-		]);
+            'title' => 'required',
+            'project_id' => 'required',
+            'status' => 'required'
+        ]);
         $requestData = $request->all();
-        
+
         $changerequest = ChangeRequest::findOrFail($id);
         $changerequest->update($requestData);
 

@@ -7,7 +7,7 @@
 
             <div class="col-md-9">
                 <div class="card">
-                    <div class="card-header">ChangeRequest {{ $changerequest->id }}</div>
+                    <div class="card-header">Change Request {{ $changerequest->id }}</div>
                     <div class="card-body">
 
                         <a href="{{ url('/admin/change-request') }}" title="Back"><button class="btn btn-warning btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
@@ -27,7 +27,29 @@
                                     <tr>
                                         <th>ID</th><td>{{ $changerequest->id }}</td>
                                     </tr>
-                                    <tr><th> Title </th><td> {{ $changerequest->title }} </td></tr><tr><th> Description </th><td> {{ $changerequest->description }} </td></tr><tr><th> Project Id </th><td> {{ $changerequest->project_id }} </td></tr>
+                                    <tr>
+                                        <th> Title </th><td> {{ $changerequest->title }} </td>
+                                    </tr>
+                                    <tr>
+                                        <th> Project </th>
+                                        <td> {{ $changerequest->project->title }} </td>
+                                    </tr>
+                                    <tr>
+                                        <th> Reporter User </th>
+                                        <td> {{ $changerequest->reported_by->name }} </td>
+                                    </tr>
+                                    <tr>
+                                        <th> Assigned User </th>
+                                        <td> {{ $changerequest->assigned_to->name }} </td>
+                                    </tr>
+                                    <tr>
+                                        <th> Status </th>
+                                        <td> {{ $changerequest->status }} </td>
+                                    </tr>
+                                    <tr>
+                                        <th> Description </th>
+                                        <td> {{ $changerequest->description }} </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
