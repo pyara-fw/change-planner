@@ -41,6 +41,9 @@
         .btn-danger {
             background-color: rgba(200, 35, 51, 0.9) !important;
         }
+        .btn-primary {
+            background-color: #007bff !important;
+        }
     </style>
 
         <!-- Scripts -->
