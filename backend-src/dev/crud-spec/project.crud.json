@@ -31,7 +31,7 @@
     "validations": [
         {
             "field": "title",
-            "rules": "required|max:10"
+            "rules": "required"
         },
         {
             "field": "user_id",

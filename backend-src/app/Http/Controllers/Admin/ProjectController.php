@@ -56,7 +56,7 @@ class ProjectController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'title' => 'required|max:10',
+            'title' => 'required',
             'user_id' => 'required'
         ]);
         $requestData = $request->all();
@@ -107,7 +107,7 @@ class ProjectController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'title' => 'required|max:10',
+            'title' => 'required',
             'user_id' => 'required'
         ]);
         $requestData = $request->all();
