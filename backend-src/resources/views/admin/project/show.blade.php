@@ -27,7 +27,11 @@
                                     <tr>
                                         <th>ID</th><td>{{ $project->id }}</td>
                                     </tr>
-                                    <tr><th> Title </th><td> {{ $project->title }} </td></tr><tr><th> Description </th><td> {{ $project->description }} </td></tr><tr><th> User Id </th><td> {{ $project->user_id }} </td></tr>
+                                    <tr><th> Title </th><td> {{ $project->title }} </td></tr>
+                                    <tr><th> Owner  </th><td> {{ $project->user->name }} </td></tr>
+                                    <tr ><th colspan="2"> Description </th></tr>
+                                    <tr> <td colspan="2"> {{ $project->description }} </td> </tr>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>

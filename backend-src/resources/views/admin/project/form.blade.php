@@ -9,8 +9,16 @@
     {!! $errors->first('description', '<p class="help-block">:message</p>') !!}
 </div>
 <div class="form-group {{ $errors->has('user_id') ? 'has-error' : ''}}">
-    <label for="user_id" class="control-label">{{ 'User Id' }}</label>
-    <input class="form-control" name="user_id" type="number" id="user_id" value="{{ isset($project->user_id) ? $project->user_id : ''}}" required>
+    <label for="user_id" class="control-label">{{ 'Owner' }}</label>
+    <select class="form-control"  name="user_id" id="user_id" value="{{ isset($project->user_id) ? $project->user_id : ''}}" required>
+    @foreach($list_users as $user)
+        <option value="{{ $user->id }}"
+        @if (isset($project->user_id) && $project->user_id == $user->id)
+            SELECTED
+        @endif
+        >{{ $user->name }}</option>
+    @endforeach
+    </select>
     {!! $errors->first('user_id', '<p class="help-block">:message</p>') !!}
 </div>
 

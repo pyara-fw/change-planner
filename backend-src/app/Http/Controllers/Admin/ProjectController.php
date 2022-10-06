@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
@@ -39,7 +40,10 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return view('admin.project.create');
+        $data = [];
+        $data['list_users'] = User::all();
+
+        return view('admin.project.create', $data);
     }
 
     /**
@@ -52,11 +56,11 @@ class ProjectController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-			'title' => 'required|max:10',
-			'user_id' => 'required'
-		]);
+            'title' => 'required|max:10',
+            'user_id' => 'required'
+        ]);
         $requestData = $request->all();
-        
+
         Project::create($requestData);
 
         return redirect('admin/project')->with('flash_message', 'Project added!');
@@ -86,8 +90,10 @@ class ProjectController extends Controller
     public function edit($id)
     {
         $project = Project::findOrFail($id);
+        $data = compact('project');
+        $data['list_users'] = User::all();
 
-        return view('admin.project.edit', compact('project'));
+        return view('admin.project.edit', $data);
     }
 
     /**
@@ -101,11 +107,11 @@ class ProjectController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-			'title' => 'required|max:10',
-			'user_id' => 'required'
-		]);
+            'title' => 'required|max:10',
+            'user_id' => 'required'
+        ]);
         $requestData = $request->all();
-        
+
         $project = Project::findOrFail($id);
         $project->update($requestData);
 
