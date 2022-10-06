@@ -24,3 +24,5 @@ Route::get('/dashboard', function () {
 require __DIR__.'/auth.php';
 
 Route::resource('admin/project', 'App\Http\Controllers\Admin\ProjectController');
+
+Route::resource('admin/change-request', 'App\Http\Controllers\Admin\ChangeRequestController');
