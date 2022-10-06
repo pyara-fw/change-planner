@@ -44,6 +44,9 @@
         .btn-primary {
             background-color: #007bff !important;
         }
+        .btn-secondary {
+            background-color: #808080 !important;
+        }
     </style>
 
         <!-- Scripts -->
