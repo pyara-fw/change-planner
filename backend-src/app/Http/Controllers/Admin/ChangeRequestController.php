@@ -83,7 +83,6 @@ class ChangeRequestController extends Controller
     {
         $changerequest = ChangeRequest::findOrFail($id);
 
-        // dd($changerequest->reportedBy);
         return view('admin.change-request.show', compact('changerequest'));
     }
 
