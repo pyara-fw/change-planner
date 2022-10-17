@@ -47,6 +47,10 @@
         .btn-secondary {
             background-color: #808080 !important;
         }
+
+        .container {
+            max-width: 100% !important;
+        }
     </style>
 
         <!-- Scripts -->
