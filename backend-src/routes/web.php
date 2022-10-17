@@ -13,13 +13,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// TODO Check in here if there are the payload for provision the user
+
+// TODO change the welcome page to some Pyara's introduction
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', '\App\Http\Controllers\User\IndexController@index')
+->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/task/{id}', '\App\Http\Controllers\User\IndexController@viewTask')
+->middleware(['auth', 'verified']);
+
+Route::post('/task/{id}', '\App\Http\Controllers\User\IndexController@getTask')
+->middleware(['auth', 'verified']);
+
+
 
 require __DIR__.'/auth.php';
 
