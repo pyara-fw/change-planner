@@ -18,8 +18,15 @@ class IndexController extends Controller
         $changerequest = ChangeRequest::all();
 
         $data = [
-            'tasks' => $changerequest
+            'tasks' => []
         ];
+
+        $parsedown = new \ParsedownExtra();
+        foreach ($changerequest as $item) {
+            $item->description = $parsedown->text($item->description);
+            $data['tasks'][] = $item;
+        }
+
         return view('dashboard', $data);
         // return json_encode($changerequest, true);
     }
@@ -28,11 +35,37 @@ class IndexController extends Controller
     {
         $changerequest = ChangeRequest::findOrFail($id);
 
-        $parsedown = new \Parsedown();
-        $parsedown->setSafeMode(true);
+        $parsedown = new \ParsedownExtra();
+        // $parsedown->setSafeMode(true);
         $changerequest->description = $parsedown->text($changerequest->description);
 
-        return view('user.view-task', compact('changerequest'));
+        $changeplan = [
+            'statusTitle' => 'Not started',
+            'description' => ''
+        ];
+
+        $data = [
+            'changerequest' => $changerequest,
+            'changeplan' => $changeplan,
+            'changeitems' => []
+        ];
+
+        $data['changeitems'][] = [
+            'title' => 'create table X',
+            'description' => 'Create the migration'
+        ];
+
+        $data['changeitems'][] = [
+            'title' => 'create route for endpoint',
+            'description' => 'Create the rount on file X'
+        ];
+
+        $data['changeitems'][] = [
+            'title' => 'create route for endpoint',
+            'description' => 'Create the rount on file X'
+        ];
+
+        return view('user.view-task', $data);
     }
 
     public function getTask($id)

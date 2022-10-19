@@ -47,9 +47,44 @@
         .btn-secondary {
             background-color: #808080 !important;
         }
+        .btn-info {
+            background-color: #80c0f080 !important;
+            color: black;
+        }
 
         .container {
             max-width: 100% !important;
+        }
+
+        .markdown-section .hdr1 {
+            color: #222;
+            font-size: 24px;
+            font-weight: bolder;
+            margin-top: 24px;
+            margin-bottom: 12px;
+        }
+        .markdown-section .hdr2 {
+            color: #333;
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 24px;
+            margin-bottom: 12px;
+
+        }
+        .markdown-section li {
+            /* list-style-type: decimal; */
+            list-style-position: inside;
+        }
+
+        .markdown-section OL {
+            list-style-type: decimal;
+        }
+        .markdown-section UL {
+            list-style-type: square;
+        }
+
+        .markdown-section CODE {
+            font-size: 12px;
         }
     </style>
 

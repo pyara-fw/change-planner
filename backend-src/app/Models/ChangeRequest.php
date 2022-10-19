@@ -39,4 +39,18 @@ class ChangeRequest extends Model
     {
         return $this->belongsTo('App\Models\Project');
     }
+
+    public function statusTitle($status=null)
+    {
+        $statusArr = [
+            '1' => 'Pending',
+            '2' => 'Executing',
+            '3' => 'Planned',
+        ];
+
+        if (!$status) {
+            $status = $this->status;
+        }
+        return $statusArr[$status] ?? 'Unknown';
+    }
 }

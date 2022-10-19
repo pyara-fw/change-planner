@@ -4,12 +4,12 @@
             {{ $title }}
         </div>
         <div class="card-body" style="overflow-y: auto;">
-            <p class="card-text" style="height: 8rem; ">
-                {{ $description }}
-            </p>
+            <div class="markdown-section" style="height: 250px; font-size: small;">
+                {!! $description !!}
+            </div>
         </div>
         <div class="card-footer">
-            <a href='/task/{{ $id }}' class="btn btn-primary">View</a>
+            <a href='/task/{{ $id }}' class="btn btn-dark btn-block">View</a>
         </div>
     </div>
 </div>

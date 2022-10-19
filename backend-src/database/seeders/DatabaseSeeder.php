@@ -51,15 +51,22 @@ This task intends to add this feature to Cachet.
 
         DB::table('change_requests')->insert([
             'title' => 'Task-2: Fix a bug of Twig tags on incident templates',
-            'description' => 'It was found a bug related to the "incident template" feature.
-            Steps to reproduce:
-            1. Create an "Incident template" with a Twig tag (for example, {{"now"|date("U")}} );
-            2. Create an "incident" selecting that template created on step above. Save it;
-            3. Try to edit the incident created on previous step, clicking on "edit button".
+            'description' => '
+# Introduction {.hdr1}
+It was found a bug related to the "incident template" feature.
+## Steps to reproduce: {.hdr2}
+1. Create an "Incident template" with a Twig tag (for example, `{{"now"|date("U")}}` );
+2. Create an "incident" selecting that template created on step above. Save it;
+3. Try to edit the incident created on previous step, clicking on "edit button".
 
-            Is expected a blank page.
+| Is expected a blank page.
 
-            The objective of this task is to fix this behaviour.
+- one
+- two
+- three
+
+#  Objective {.hdr1}
+The objective of this task is to fix this behaviour.
             ',
 
             'project_id' => 1,
