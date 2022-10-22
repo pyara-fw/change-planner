@@ -38,3 +38,4 @@ Route::resource('admin/project', 'App\Http\Controllers\Admin\ProjectController')
 Route::resource('admin/change-request', 'App\Http\Controllers\Admin\ChangeRequestController');
 
 Route::resource('participant/task', 'App\Http\Controllers\Participant\TaskController');
+Route::resource('participant/solution', 'App\Http\Controllers\Participant\SolutionController');
