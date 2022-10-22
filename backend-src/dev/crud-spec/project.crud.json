@@ -1,0 +1,41 @@
+{
+    "fields": [
+        {
+            "name": "title",
+            "type": "string"
+        },
+        {
+            "name": "description",
+            "type": "text"
+        },
+        {
+            "name": "user_id",
+            "type": "bigint#unsigned"
+        }
+    ],
+    "foreign_keys": [
+        {
+            "column": "user_id",
+            "references": "id",
+            "on": "users",
+            "onDelete": "cascade"
+        }
+    ],
+    "relationships": [
+        {
+            "name": "user",
+            "type": "belongsTo",
+            "class": "App\\Models\\User"
+        }
+    ],
+    "validations": [
+        {
+            "field": "title",
+            "rules": "required"
+        },
+        {
+            "field": "user_id",
+            "rules": "required"
+        }
+    ]
+}

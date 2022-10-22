@@ -1,10 +1,10 @@
 FROM alpine:latest
 
 LABEL author="Eduardo Luz <eduardo @ eduardo-luz.com>"
-LABEL project="Pyara-change-planner"
+LABEL project="Pyara-core"
 LABEL version="0.0.1"
 
-WORKDIR /srv
+WORKDIR /app
 
 # Add repos
 RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
@@ -31,27 +31,11 @@ RUN cp /usr/bin/php8 /usr/bin/php \
 RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
 
 
-# COPY ./tests/* /app/tests
-# COPY ./composer.* /app/
-# COPY ./phpunit.* /app/
+COPY ./src/* /app/src
+COPY ./tests/* /app/tests
+COPY ./composer.* /app/
+COPY ./phpunit.* /app/
 
-COPY _docker_/backend/50_xdebug.ini /etc/php8/conf.d/
-# COPY 50_xdebug.ini /etc/php8/conf.d/
+COPY _docker_/php-dev/50_xdebug.ini /etc/php8/conf.d/
 
-# ENTRYPOINT ["sleep","infinity"]
-
-COPY _docker_/backend/conf/www.conf /etc/php8/php-fpm.d/
-COPY  _docker_/backend/scripts /root/scripts
-COPY ./backend-src /srv
-
-RUN chmod +x /root/scripts/*
-
-HEALTHCHECK --interval=5s --timeout=10s --start-period=5s --retries=3 CMD [ "/root/scripts/healthcheck.sh" ]
-ENTRYPOINT ["/root/scripts/entrypoint.sh"]
-CMD ["/usr/sbin/php-fpm8","-F","--fpm-config","/etc/php8/php-fpm.conf"]
-
-EXPOSE 9000
- 
-COPY _docker_/backend/conf/etc-php.ini /etc/php8/php.ini
-
-
+ENTRYPOINT ["sleep","infinity"]
