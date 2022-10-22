@@ -36,3 +36,5 @@ require __DIR__.'/auth.php';
 Route::resource('admin/project', 'App\Http\Controllers\Admin\ProjectController');
 
 Route::resource('admin/change-request', 'App\Http\Controllers\Admin\ChangeRequestController');
+
+Route::resource('participant/task', 'App\Http\Controllers\Participant\TaskController');
