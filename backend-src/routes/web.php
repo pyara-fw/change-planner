@@ -41,3 +41,4 @@ Route::resource('participant/task', 'App\Http\Controllers\Participant\TaskContro
 Route::resource('participant/solution', 'App\Http\Controllers\Participant\SolutionController');
 Route::resource('participant/item-solution', 'App\Http\Controllers\Participant\ItemSolutionController');
 Route::resource('participant/item-solution-link', 'App\Http\Controllers\Participant\ItemSolutionLinkController');
+Route::resource('review/evaluation', 'App\Http\Controllers\Review\EvaluationController');
