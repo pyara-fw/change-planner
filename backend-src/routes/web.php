@@ -44,6 +44,12 @@ Route::get('/solution/{solutionId}', '\App\Http\Controllers\Participant\IndexCon
 Route::get('/solution/{solutionId}/edit', '\App\Http\Controllers\Participant\IndexController@showFormEditSolutionDescription')
 ->middleware(['auth', 'verified'])->name('edit-solution-description');
 
+Route::get('/solution/{solutionId}/item/{itemId}/edit', '\App\Http\Controllers\Participant\IndexController@showFormEditItemSolution')
+->middleware(['auth', 'verified']);
+
+Route::post('/solution/{solutionId}/item/{itemId}/edit', '\App\Http\Controllers\Participant\IndexController@updateItemSolution')
+->middleware(['auth', 'verified']);
+
 
 Route::get('/solution/{solutionId}/item/create', '\App\Http\Controllers\Participant\IndexController@showFormCreateItemSolution')
 ->middleware(['auth', 'verified'])->name('show-form-create-item-solution');

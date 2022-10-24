@@ -123,7 +123,7 @@
 @if ($solution->status != \App\Models\Solution::STATUS_SUBMITTED)
                                     <div class="float-right btn-bar">
                                         <a class="btn btn-sm btn-primary"
-                                            href="/solution/{{ $solution['id'] }}/item/{{ $itemSolution['id'] }}"
+                                            href="/solution/{{ $solution['id'] }}/item/{{ $itemSolution['id'] }}/edit"
                                             >
                                             <i class="fa fa-pencil"></i>
                                             Edit
@@ -137,7 +137,7 @@
                                     {{ $itemSolution['title'] }}
                                 </div>
                                 <div class="change-item-description markdown-section">
-                                    {{ $itemSolution['description'] }}
+                                    {!! $itemSolution->getFormattedDescription() !!}
                                 </div>
 
                                 @if ($itemSolution['links'])

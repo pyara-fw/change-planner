@@ -178,7 +178,10 @@ And now some description...
 
         ItemSolution::create($requestData);
 
-        return redirect('solution/' . $solutionId)->with('flash_message', 'Item Solution added!');
+        return redirect()
+            ->route('show-solution', ['solutionId' => $solutionId])
+            ->with('flash_message', 'Item Solution added!');
+        // return redirect('solution/' . $solutionId)->with('flash_message', 'Item Solution added!');
     }
 
     public function updateSolution(Request $request, $solutionId)
@@ -214,12 +217,13 @@ And now some description...
             $task = $this->getTask($solution->task_id);
         }
 
+        $itemSolutions = ItemSolution::where('solution_id', $solution->id)->get();
 
 
         $data = [
             'task' => $task,
             'solution' => $solution,
-            'itemSolutions' => []
+            'itemSolutions' => $itemSolutions
         ];
         return $data;
     }
@@ -240,5 +244,48 @@ And now some description...
             'solution' => $solution
         ];
         return view('participant.main.edit-solution', $data);
+    }
+
+
+    public function showFormEditItemSolution(Request $request, $solutionId, $itemId)
+    {
+        $itemSolution = $this->getItemSolution($solutionId, $itemId);
+
+        if (!$itemSolution) {
+            return redirect()
+            ->route('show-solution', ['solutionId' => $solutionId])
+            ->with('flash_message', 'Invali item $itemId');
+        }
+
+        return view('participant.main.edit-item-solution', [
+            'itemSolution' => $itemSolution,
+            'solutionId' => $solutionId
+        ]);
+    }
+
+
+    protected function getItemSolution($solutionId, $itemId)
+    {
+        $item = ItemSolution::where('id', $itemId)->
+            where('solution_id', $solutionId)->
+            first();
+        return $item;
+    }
+
+    public function updateItemSolution(Request $request, $solutionId, $itemId)
+    {
+        $requestData = $request->all();
+        $itemSolution = $this->getItemSolution($solutionId, $itemId);
+
+
+        if (!$itemSolution) {
+            return redirect()
+            ->route('show-solution', ['solutionId' => $solutionId])
+            ->with('flash_message', 'Invali item $itemId');
+        }
+
+        $itemSolution->update($requestData);
+
+        return redirect()->route('show-solution', ['solutionId'=>$solutionId])->with('flash_message', 'Item Solution updated!');
     }
 }

@@ -33,5 +33,10 @@ class ItemSolution extends Model
     {
         return $this->belongsTo('App\Models\Solution');
     }
-    
+
+    public function getFormattedDescription()
+    {
+        $parsedown = new \ParsedownExtra();
+        return $parsedown->text($this->description);
+    }
 }
