@@ -27,7 +27,7 @@ class Solution extends Model
      *
      * @var array
      */
-    protected $fillable = ['description', 'task_id', 'user_id'];
+    protected $fillable = ['description', 'task_id', 'user_id', 'status'];
 
     public function assigned_to()
     {
@@ -37,5 +37,14 @@ class Solution extends Model
     {
         return $this->belongsTo('App\Models\Task');
     }
-    
+
+    public function status()
+    {
+        if ($this->status === 2) {
+            $status = 'Submitted';
+        } else {
+            $status = 'In progress';
+        }
+        return $status;
+    }
 }

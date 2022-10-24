@@ -77,7 +77,7 @@
                             <tbody>
                                 <tr>
                                     <th  class="table-active">Status</th>
-                                    <td> {{ $solution['statusTitle'] }} </td>
+                                    <td> {{ $solution->status() }} </td>
                                 </tr>
                             </tbody>
                         </table>
