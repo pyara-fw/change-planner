@@ -51,7 +51,17 @@
                     </div>
                     <div class="card-body">
 
-                    <div class="dropdown float-right" >
+
+@if (is_null($solution))
+    <div style="text-align:center">
+        <h2>There is no solution for this task.</h2>
+        <a class="btn btn-lg btn-success" style="color:white"
+            href="/task/{{ $task->id }}/solution/create"
+        >Create a solution for this task</a>
+    </div>
+@else
+
+<div class="dropdown float-right" >
                         <button class="btn btn-info btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 140px">
                             Actions
                         </button>
@@ -61,8 +71,6 @@
                             <a class="dropdown-item" href="#">Add Item</a>
                         </div>
                     </div>
-
-
 
 
                     <table class="table table-responsive" style="margin-top: 10px;">
@@ -129,7 +137,7 @@
                         @endforeach
                         </div>
 
-
+@endif
 
                     </div>
                 </div>
@@ -140,7 +148,7 @@
     </div>
 
 
-
+    @if (!is_null($solution))
     <div class="modal fade" id="formDescriptionModal" tabindex="-1" role="dialog" aria-labelledby="formDescriptionModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -169,5 +177,6 @@
     </div>
   </div>
 </div>
+@endif
 
 @endsection

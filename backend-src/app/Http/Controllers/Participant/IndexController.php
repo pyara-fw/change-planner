@@ -43,9 +43,42 @@ class IndexController extends Controller
             'solution' => $solution,
             'itemSolutions' => []
         ];
+        // dd($data);
 
         return view('participant.main.view-task', $data);
     }
+
+
+    public function showFormCreateSolution(Request $request, $taskId)
+    {
+        $task = $this->getTask($taskId);
+        $data = [
+            'task' => $task,
+            'taskId' => $taskId,
+            'formMode' => 'create',
+            'userId' => $request->user()->id
+        ];
+        // dd($data);
+
+        return view('participant.main.create-solution', $data);
+    }
+
+    public function createSolution(Request $request)
+    {
+        $this->validate($request, [
+            'user_id' => 'required',
+            'task_id' => 'required'
+        ]);
+        $requestData = $request->all();
+
+        Solution::create($requestData);
+
+        $url ='/task/'. $request->get('task_id');
+
+        return redirect($url)->with('flash_message', 'Solution added!');
+    }
+
+
 
     public function viewTask2($id)
     {
