@@ -36,7 +36,7 @@ class IndexController extends Controller
         // $task = Task::findOrFail($id);
         $task = $this->getTask($id);
 
-        $solution = $this->getSolution($id);
+        $solution = $this->getSolutionByTask($id);
 
         $data = [
             'task' => $task,
@@ -151,11 +151,22 @@ And now some description...
         return $task;
     }
 
-    public function getSolution($taskId)
+    public function getSolutionByTask($taskId)
     {
         try {
             $solution = Solution::where('task_id', $taskId)
                 ->firstOrFail();
+        } catch (\Exception $e) {
+            $solution = null;
+        }
+
+        return $solution;
+    }
+
+    public function getSolution($solutionId)
+    {
+        try {
+            $solution = Solution::findOrFail($solutionId);
         } catch (\Exception $e) {
             $solution = null;
         }
@@ -181,5 +192,43 @@ And now some description...
         ItemSolution::create($requestData);
 
         return redirect('solution/' . $solutionId)->with('flash_message', 'Item Solution added!');
+    }
+
+    public function updateSolution(Request $request, $solutionId)
+    {
+        // $data = [
+        //     'status' => $request->get('status'),
+        //     'solutionId' => $solutionId
+        // ];
+
+        $requestData = $request->all();
+        $requestData['user_id'] = $request->user()->id;
+
+        $solution = Solution::findOrFail($solutionId);
+        $solution->update($requestData);
+
+        return redirect()->route('show-solution', ['solutionId'=>$solutionId])->with('flash_message', 'Solution updated!');
+    }
+
+    public function viewSolution(Request $request, $solutionId)
+    {
+        $solution = $this->getSolution($solutionId);
+
+        if (is_null($solution)) {
+            // throw exception in here
+            throw new \Exception("Record not found", 404);
+        }
+
+        // $task = Task::findOrFail($id);
+        $task = $this->getTask($solution->task_id);
+
+        $data = [
+            'task' => $task,
+            'solution' => $solution,
+            'itemSolutions' => []
+        ];
+        // dd($data);
+
+        return view('participant.main.view-task', $data);
     }
 }

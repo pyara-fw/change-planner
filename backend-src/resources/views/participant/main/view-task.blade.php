@@ -62,14 +62,24 @@
 @else
 
 <div class="dropdown float-right" >
-                        <button class="btn btn-info btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 140px">
-                            Actions
+
+
+                        <button class="btn btn-info btn-sm " type="button" style="width: 140px">
+                            <i class="fa fa-edit"></i>
+                            Edit solution
                         </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" data-toggle="modal" data-target="#formDescriptionModal" href="#">Edit Description</a>
-                            <a class="dropdown-item" href="#">Change Status</a>
-                            <a class="dropdown-item" href="#">Add Item</a>
-                        </div>
+
+                        <form method="POST" action="/solution/{{  $solution->id }}" accept-charset="UTF-8" style="display:inline">
+                            {{ method_field('PATCH') }}
+                            {{ csrf_field() }}
+                            @if ($solution->status == \App\Models\Solution::STATUS_SUBMITTED)
+                            <input type="hidden" name="status" value="{{ \App\Models\Solution::STATUS_IN_PROGRESS }}"/>
+                            <button type="submit" class="btn btn-warning btn-sm" title="Back solution in progress" onclick="return confirm(&quot;Confirm back in progress?&quot;)"><i class="fa fa-recycle" aria-hidden="true"></i> Back in progress</button>
+                            @else
+                            <input type="hidden" name="status" value="{{ \App\Models\Solution::STATUS_SUBMITTED }}"/>
+                            <button type="submit" class="btn btn-warning btn-sm" title="Submit solution" onclick="return confirm(&quot;Confirm submission?&quot;)"><i class="fa fa-upload" aria-hidden="true"></i> Submit solution</button>
+                            @endif
+                        </form>
                     </div>
 
 

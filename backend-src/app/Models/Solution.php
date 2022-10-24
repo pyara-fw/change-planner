@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Solution extends Model
 {
     use SoftDeletes;
+
+    public const STATUS_IN_PROGRESS = 1;
+    public const STATUS_SUBMITTED = 2;
+
+
     /**
      * The database table used by the model.
      *

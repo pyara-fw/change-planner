@@ -24,7 +24,7 @@ Route::get('/dashboard', '\App\Http\Controllers\Participant\IndexController@inde
 ->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/task/{id}', '\App\Http\Controllers\Participant\IndexController@viewTask')
-->middleware(['auth', 'verified']);
+->middleware(['auth', 'verified'])->name('show-task');
 
 Route::post('/task/{id}', '\App\Http\Controllers\Participant\IndexController@viewTask')
 ->middleware(['auth', 'verified']);
@@ -34,6 +34,12 @@ Route::get('/task/{id}/solution/create', '\App\Http\Controllers\Participant\Inde
 
 Route::post('/solution', '\App\Http\Controllers\Participant\IndexController@createSolution')
 ->middleware(['auth', 'verified']);
+
+Route::patch('/solution/{solutionId}', '\App\Http\Controllers\Participant\IndexController@updateSolution')
+->middleware(['auth', 'verified']);
+
+Route::get('/solution/{solutionId}', '\App\Http\Controllers\Participant\IndexController@viewSolution')
+->middleware(['auth', 'verified'])->name('show-solution');
 
 
 Route::get('/solution/{solutionId}/item/create', '\App\Http\Controllers\Participant\IndexController@showFormCreateItemSolution')
