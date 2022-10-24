@@ -50,6 +50,9 @@ Route::get('/solution/{solutionId}/item/{itemId}/edit', '\App\Http\Controllers\P
 Route::post('/solution/{solutionId}/item/{itemId}/edit', '\App\Http\Controllers\Participant\IndexController@updateItemSolution')
 ->middleware(['auth', 'verified']);
 
+Route::delete('/solution/{solutionId}/item/{itemId}', '\App\Http\Controllers\Participant\IndexController@removeItemSolution')
+->middleware(['auth', 'verified']);
+
 
 Route::get('/solution/{solutionId}/item/create', '\App\Http\Controllers\Participant\IndexController@showFormCreateItemSolution')
 ->middleware(['auth', 'verified'])->name('show-form-create-item-solution');

@@ -123,15 +123,19 @@
 @if ($solution->status != \App\Models\Solution::STATUS_SUBMITTED)
                                     <div class="float-right btn-bar">
                                         <a class="btn btn-sm btn-primary"
-                                            href="/solution/{{ $solution['id'] }}/item/{{ $itemSolution['id'] }}/edit"
+                                            href="/solution/{{ $solution->id }}/item/{{ $itemSolution->id }}/edit"
                                             >
-                                            <i class="fa fa-pencil"></i>
+                                            <i class="fa fa-edit"></i>
                                             Edit
                                         </a>
                                         &nbsp;
-                                        <a class="btn btn-sm btn-danger ">
-                                            <i class="fa fa-trash"></i>
-                                            Del</a>
+
+                                        <form method="POST" action="/solution/{{ $solution->id }}/item/{{ $itemSolution->id }}" accept-charset="UTF-8" style="display:inline">
+                                                {{ method_field('DELETE') }}
+                                                {{ csrf_field() }}
+                                                <button type="submit" class="btn btn-danger btn-sm" title="Delete Item Solution" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash" aria-hidden="true"></i> Del</button>
+                                            </form>
+
                                     </div>
 @endif
                                     {{ $itemSolution['title'] }}

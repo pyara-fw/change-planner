@@ -288,4 +288,22 @@ And now some description...
 
         return redirect()->route('show-solution', ['solutionId'=>$solutionId])->with('flash_message', 'Item Solution updated!');
     }
+
+    public function removeItemSolution(Request $request, $solutionId, $itemId)
+    {
+        ItemSolution::destroy($itemId);
+
+        // $requestData = $request->all();
+        // $itemSolution = $this->getItemSolution($solutionId, $itemId);
+
+        // if (!$itemSolution) {
+        //     return redirect()
+        //     ->route('show-solution', ['solutionId' => $solutionId])
+        //     ->with('flash_message', 'Invali item $itemId');
+        // }
+
+        // $itemSolution->delete();
+
+        return redirect()->route('show-solution', ['solutionId'=>$solutionId])->with('flash_message', 'Item Solution removed!');
+    }
 }
