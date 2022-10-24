@@ -33,17 +33,7 @@ class IndexController extends Controller
 
     public function viewTask($id)
     {
-        // $task = Task::findOrFail($id);
-        $task = $this->getTask($id);
-
-        $solution = $this->getSolutionByTask($id);
-
-        $data = [
-            'task' => $task,
-            'solution' => $solution,
-            'itemSolutions' => []
-        ];
-        // dd($data);
+        $data = $this->getViewTaskSolutionData($id);
 
         return view('participant.main.view-task', $data);
     }
@@ -54,11 +44,8 @@ class IndexController extends Controller
         $task = $this->getTask($taskId);
         $data = [
             'task' => $task,
-            'taskId' => $taskId,
-            'formMode' => 'create',
             'userId' => $request->user()->id
         ];
-        // dd($data);
 
         return view('participant.main.create-solution', $data);
     }
@@ -196,11 +183,6 @@ And now some description...
 
     public function updateSolution(Request $request, $solutionId)
     {
-        // $data = [
-        //     'status' => $request->get('status'),
-        //     'solutionId' => $solutionId
-        // ];
-
         $requestData = $request->all();
         $requestData['user_id'] = $request->user()->id;
 
@@ -212,14 +194,25 @@ And now some description...
 
     public function viewSolution(Request $request, $solutionId)
     {
-        $solution = $this->getSolution($solutionId);
+        $data = $this->getViewTaskSolutionData(null, $solutionId);
+
+        return view('participant.main.view-task', $data);
+    }
+
+    protected function getViewTaskSolutionData($taskId=null, $solutionId=null)
+    {
+        if ($taskId) {
+            $solution = $this->getSolutionByTask($taskId);
+        } else {
+            $solution = $this->getSolution($solutionId);
+        }
+
 
         if (is_null($solution)) {
             // throw exception in here
             throw new \Exception("Record not found", 404);
         }
 
-        // $task = Task::findOrFail($id);
         $task = $this->getTask($solution->task_id);
 
         $data = [
@@ -227,8 +220,24 @@ And now some description...
             'solution' => $solution,
             'itemSolutions' => []
         ];
-        // dd($data);
+        return $data;
+    }
 
-        return view('participant.main.view-task', $data);
+    public function showFormEditSolutionDescription(Request $request, $solutionId)
+    {
+        $solution = $this->getSolution($solutionId);
+
+        if (!$solution) {
+            throw new \Exception("Solution not found", 404);
+        }
+
+        $task = $this->getTask($solution->task_id);
+
+        $data = [
+            'task' => $task,
+            'userId' => $request->user()->id,
+            'solution' => $solution
+        ];
+        return view('participant.main.edit-solution', $data);
     }
 }

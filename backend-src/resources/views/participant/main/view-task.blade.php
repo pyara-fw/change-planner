@@ -64,10 +64,12 @@
 <div class="dropdown float-right" >
 
 
-                        <button class="btn btn-info btn-sm " type="button" style="width: 140px">
+@if ($solution->status != \App\Models\Solution::STATUS_SUBMITTED)
+                        <a class="btn btn-info btn-sm " href="/solution/{{ $solution->id }}/edit" style="width: 140px">
                             <i class="fa fa-edit"></i>
                             Edit solution
-                        </button>
+                        </a>
+@endif
 
                         <form method="POST" action="/solution/{{  $solution->id }}" accept-charset="UTF-8" style="display:inline">
                             {{ method_field('PATCH') }}
@@ -96,19 +98,20 @@
                         <div class="markdown-section"
                             style="padding:20px;">
                             <label>Description</label> <br/>
-                            {!! $solution['description'] !!}
+                            {!! $solution->getFormattedDescription() !!}
                         </div>
                         <hr/>
                         <div class="markdown-section">
-
-                        <div class="float-right btn-bar">
-                                        <a class="btn btn-sm btn-success "
-                                            href="/solution/{{ $solution['id'] }}/item/create"
-                                        >
-                                            <i class="fa fa-plus"></i>
-                                            Add
-                                        </a>
-                                    </div>
+@if ($solution->status != \App\Models\Solution::STATUS_SUBMITTED)
+                            <div class="float-right btn-bar">
+                                <a class="btn btn-sm btn-success "
+                                    href="/solution/{{ $solution['id'] }}/item/create"
+                                >
+                                    <i class="fa fa-plus"></i>
+                                    Add
+                                </a>
+                            </div>
+@endif
                             <h1 class="hdr2">Solution Plan Items</h1>
                         </div>
 
@@ -117,6 +120,7 @@
                             <div class="change-item-card">
                                 <div class="change-item-title">
 
+@if ($solution->status != \App\Models\Solution::STATUS_SUBMITTED)
                                     <div class="float-right btn-bar">
                                         <a class="btn btn-sm btn-primary"
                                             href="/solution/{{ $solution['id'] }}/item/{{ $itemSolution['id'] }}"
@@ -129,7 +133,7 @@
                                             <i class="fa fa-trash"></i>
                                             Del</a>
                                     </div>
-
+@endif
                                     {{ $itemSolution['title'] }}
                                 </div>
                                 <div class="change-item-description markdown-section">
@@ -158,35 +162,5 @@
     </div>
 
 
-    @if (!is_null($solution))
-    <div class="modal fade" id="formDescriptionModal" tabindex="-1" role="dialog" aria-labelledby="formDescriptionModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="formDescriptionModalLabel">General description</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form method="post" id="form-save-message" action="/task/{{ $task->id }}/description">
-        {{ csrf_field() }}
-          <div class="form-group">
-            <label for="message-text" class="col-form-label">Message:</label>
-            <textarea class="form-control" name="description"
-            rows="10"
-            cols="50"
-             id="message-text">{{ $solution['description'] }}</textarea>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button type="button" onclick="$('#form-save-message').submit()" class="btn btn-primary">Save</button>
-      </div>
-    </div>
-  </div>
-</div>
-@endif
 
 @endsection

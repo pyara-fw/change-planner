@@ -41,6 +41,9 @@ Route::patch('/solution/{solutionId}', '\App\Http\Controllers\Participant\IndexC
 Route::get('/solution/{solutionId}', '\App\Http\Controllers\Participant\IndexController@viewSolution')
 ->middleware(['auth', 'verified'])->name('show-solution');
 
+Route::get('/solution/{solutionId}/edit', '\App\Http\Controllers\Participant\IndexController@showFormEditSolutionDescription')
+->middleware(['auth', 'verified'])->name('edit-solution-description');
+
 
 Route::get('/solution/{solutionId}/item/create', '\App\Http\Controllers\Participant\IndexController@showFormCreateItemSolution')
 ->middleware(['auth', 'verified'])->name('show-form-create-item-solution');

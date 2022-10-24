@@ -52,4 +52,11 @@ class Solution extends Model
         }
         return $status;
     }
+
+
+    public function getFormattedDescription()
+    {
+        $parsedown = new \ParsedownExtra();
+        return $parsedown->text($this->description);
+    }
 }
