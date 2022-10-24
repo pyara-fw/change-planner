@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Solution extends Model
 {
     use SoftDeletes;
+
+    public const STATUS_IN_PROGRESS = 1;
+    public const STATUS_SUBMITTED = 2;
+
+
     /**
      * The database table used by the model.
      *
@@ -27,7 +32,7 @@ class Solution extends Model
      *
      * @var array
      */
-    protected $fillable = ['description', 'task_id', 'user_id'];
+    protected $fillable = ['description', 'task_id', 'user_id', 'status'];
 
     public function assigned_to()
     {
@@ -37,5 +42,21 @@ class Solution extends Model
     {
         return $this->belongsTo('App\Models\Task');
     }
-    
+
+    public function status()
+    {
+        if ($this->status === 2) {
+            $status = 'Submitted';
+        } else {
+            $status = 'In progress';
+        }
+        return $status;
+    }
+
+
+    public function getFormattedDescription()
+    {
+        $parsedown = new \ParsedownExtra();
+        return $parsedown->text($this->description);
+    }
 }

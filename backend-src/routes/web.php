@@ -20,14 +20,45 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', '\App\Http\Controllers\User\IndexController@index')
+Route::get('/dashboard', '\App\Http\Controllers\Participant\IndexController@index')
 ->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/task/{id}', '\App\Http\Controllers\User\IndexController@viewTask')
+Route::get('/task/{id}', '\App\Http\Controllers\Participant\IndexController@viewTask')
+->middleware(['auth', 'verified'])->name('show-task');
+
+Route::post('/task/{id}', '\App\Http\Controllers\Participant\IndexController@viewTask')
 ->middleware(['auth', 'verified']);
 
-Route::post('/task/{id}', '\App\Http\Controllers\User\IndexController@getTask')
+Route::get('/task/{id}/solution/create', '\App\Http\Controllers\Participant\IndexController@showFormCreateSolution')
 ->middleware(['auth', 'verified']);
+
+Route::post('/solution', '\App\Http\Controllers\Participant\IndexController@createSolution')
+->middleware(['auth', 'verified']);
+
+Route::patch('/solution/{solutionId}', '\App\Http\Controllers\Participant\IndexController@updateSolution')
+->middleware(['auth', 'verified']);
+
+Route::get('/solution/{solutionId}', '\App\Http\Controllers\Participant\IndexController@viewSolution')
+->middleware(['auth', 'verified'])->name('show-solution');
+
+Route::get('/solution/{solutionId}/edit', '\App\Http\Controllers\Participant\IndexController@showFormEditSolutionDescription')
+->middleware(['auth', 'verified'])->name('edit-solution-description');
+
+Route::get('/solution/{solutionId}/item/{itemId}/edit', '\App\Http\Controllers\Participant\IndexController@showFormEditItemSolution')
+->middleware(['auth', 'verified']);
+
+Route::post('/solution/{solutionId}/item/{itemId}/edit', '\App\Http\Controllers\Participant\IndexController@updateItemSolution')
+->middleware(['auth', 'verified']);
+
+Route::delete('/solution/{solutionId}/item/{itemId}', '\App\Http\Controllers\Participant\IndexController@removeItemSolution')
+->middleware(['auth', 'verified']);
+
+
+Route::get('/solution/{solutionId}/item/create', '\App\Http\Controllers\Participant\IndexController@showFormCreateItemSolution')
+->middleware(['auth', 'verified'])->name('show-form-create-item-solution');
+
+Route::post('/solution/{solutionId}/item/create', '\App\Http\Controllers\Participant\IndexController@storeItemSolution')
+->middleware(['auth', 'verified'])->name('create-item-solution');
 
 
 

@@ -52,6 +52,10 @@
             color: black;
         }
 
+        .btn-bar {
+            color: white;
+        }
+
         .container {
             max-width: 100% !important;
         }
@@ -86,6 +90,13 @@
         .markdown-section CODE {
             font-size: 12px;
         }
+
+        .change-item-card {
+            margin-top: 12px;
+            padding: 10px;
+            border: solid 1px #ccc;
+        }
+
     </style>
 
         <!-- Scripts -->
