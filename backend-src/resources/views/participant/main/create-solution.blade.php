@@ -22,6 +22,7 @@
 
                         <form method="POST" action="/solution" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
                             {{ csrf_field() }}
+                            <input type="hidden" name="status" value="{{ \App\Models\Solution::STATUS_IN_PROGRESS }}"/>
 
                             <div class="form-group {{ $errors->has('description') ? 'has-error' : ''}}">
     <label for="description" class="control-label">{{ 'Description' }}</label>

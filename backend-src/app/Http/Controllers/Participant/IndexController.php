@@ -209,11 +209,12 @@ And now some description...
 
 
         if (is_null($solution)) {
-            // throw exception in here
-            throw new \Exception("Record not found", 404);
+            $task = $this->getTask($taskId);
+        } else {
+            $task = $this->getTask($solution->task_id);
         }
 
-        $task = $this->getTask($solution->task_id);
+
 
         $data = [
             'task' => $task,
