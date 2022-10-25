@@ -27,78 +27,8 @@
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js"integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous">
     </script>
 
-    <style>
-        .footer {
-            position: fixed;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            background-color: #9C27B0;
-            color: white;
-            text-align: center;
-        }
-
-        .btn-danger {
-            background-color: rgba(200, 35, 51, 0.9) !important;
-        }
-        .btn-primary {
-            background-color: #007bff !important;
-        }
-        .btn-secondary {
-            background-color: #808080 !important;
-        }
-        .btn-info {
-            background-color: #80c0f080 !important;
-            color: black;
-        }
-
-        .btn-bar {
-            color: white;
-        }
-
-        .container {
-            max-width: 100% !important;
-        }
-
-        .markdown-section .hdr1 {
-            color: #222;
-            font-size: 24px;
-            font-weight: bolder;
-            margin-top: 24px;
-            margin-bottom: 12px;
-        }
-        .markdown-section .hdr2 {
-            color: #333;
-            font-size: 20px;
-            font-weight: bold;
-            margin-top: 24px;
-            margin-bottom: 12px;
-
-        }
-        .markdown-section li {
-            /* list-style-type: decimal; */
-            list-style-position: inside;
-        }
-
-        .markdown-section OL {
-            list-style-type: decimal;
-        }
-        .markdown-section UL {
-            list-style-type: square;
-        }
-
-        .markdown-section CODE {
-            font-size: 12px;
-        }
-
-        .change-item-card {
-            margin-top: 12px;
-            padding: 10px;
-            border: solid 1px #ccc;
-        }
-
-    </style>
-
+        <link rel="stylesheet" href="/css/layout-app.css" />
+        <link rel="stylesheet" href="/css/prism.css" />
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
@@ -122,5 +52,6 @@
                 </div>
             </main>
         </div>
+        <script src="/js/prism.js" ></script>
     </body>
 </html>
