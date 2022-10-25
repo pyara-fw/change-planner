@@ -122,20 +122,18 @@
 
 @if ($solution->status != \App\Models\Solution::STATUS_SUBMITTED)
                                     <div class="float-right btn-bar">
-                                        <a class="btn btn-sm btn-primary"
+                                        <a class="btn btn-sm btn-secondary"
                                             href="/solution/{{ $solution->id }}/item/{{ $itemSolution->id }}/edit"
                                             >
                                             <i class="fa fa-edit"></i>
                                             Edit
                                         </a>
                                         &nbsp;
-
                                         <form method="POST" action="/solution/{{ $solution->id }}/item/{{ $itemSolution->id }}" accept-charset="UTF-8" style="display:inline">
                                                 {{ method_field('DELETE') }}
                                                 {{ csrf_field() }}
                                                 <button type="submit" class="btn btn-danger btn-sm" title="Delete Item Solution" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash" aria-hidden="true"></i> Del</button>
                                             </form>
-
                                     </div>
 @endif
                                     {{ $itemSolution['title'] }}
@@ -144,12 +142,45 @@
                                     {!! $itemSolution->getFormattedDescription() !!}
                                 </div>
 
-                                @if ($itemSolution['links'])
-                                    @foreach ($itemSolution['links'] as $link)
-                                    <div style="font-size:small; color: navy;">
-                                    <i class="fa fa-link"></i>  {{ $link['title'] }}
+
+                                @if ($itemSolution->links)
+                                <br/>
+                                <hr/>
+
+                                <div class="links-box">
+                                <div class="float-right btn-bar">
+                                        <a class="btn btn-sm btn-secondary"
+                                            href="/solution/{{ $solution->id }}/item/{{ $itemSolution->id }}/link/create"
+                                            >
+                                            <i class="fa fa-plus"></i>
+                                            Add link
+                                        </a>
+                                </div>
+
+                                <label>Links</label>
+                                <hr/>
+                                    @foreach ($itemSolution->links as $link)
+                                    <div class="item-link">
+                                        <div class="float-right">
+                                            <a href="/solution/{{ $solution->id }}/item/{{ $itemSolution->id }}/link/{{ $link->id }}" class="badge badge-secondary">Edit</a>
+
+
+                                            <form method="POST" id="form-delete-link-{{$link->id}}" action="/solution/{{ $solution->id }}/item/{{ $itemSolution->id }}/link/{{ $link->id }}" accept-charset="UTF-8" style="display:inline">
+                                                {{ method_field('DELETE') }}
+                                                {{ csrf_field() }}
+                                                <a href="javascript:document.getElementById('form-delete-link-{{$link->id}}').submit()" class="badge badge-danger">Del</a>
+                                            </form>
+
+
+                                        </div>
+
+
+                                    <a href='{{ $link->url }}'>
+                                        <i class="fa fa-link"></i>  {{ $link->title }}
+                                    </a> - {{ $link->description }}
                                     </div>
                                     @endforeach
+                                </div>
                                 @endif
                             </div>
                         @endforeach

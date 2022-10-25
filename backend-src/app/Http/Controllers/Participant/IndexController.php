@@ -7,33 +7,92 @@ use App\Http\Controllers\Controller;
 use App\Models\Task;
 use App\Models\ChangeRequest;
 use App\Models\ItemSolution;
+use App\Models\ItemSolutionLink;
 use App\Models\Solution;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Parsedown;
 
 class IndexController extends Controller
 {
     public function index(Request $request)
     {
-        $task = Task::all();
+        $tasks = DB::table('tasks')
+                    ->leftJoin('solutions', function ($join) use ($request) {
+                        $join->on('solutions.task_id', '=', 'tasks.id')
+                        ->where('solutions.user_id', '=', $request->user()->id);
+                    })
+                    ->select('tasks.*', 'solutions.id as solution_id', 'solutions.status as solution_status')
+                    ->get();
 
         $data = [
             'tasks' => []
         ];
 
-        $parsedown = new \ParsedownExtra();
-        foreach ($task as $item) {
-            $item->description = $parsedown->text($item->description);
+
+        foreach ($tasks as $item) {
+            $item->description = $this->renderMarkdown($item->description);
+            $item->formattedTags = $this->formatTags($item->tags);
+            $item->formattedStatus = $this->formatTaskStatus($item, $request->user()->id);
             $data['tasks'][] = $item;
         }
 
         return view('dashboard', $data);
-        // return json_encode($task, true);
     }
 
-    public function viewTask($id)
+    protected function formatTags($strTags)
     {
-        $data = $this->getViewTaskSolutionData($id);
+        $response = [];
+        $lsTags = explode(';', $strTags);
+        foreach ($lsTags as $tag) {
+            $parts = explode(':', $tag);
+            if (count($parts) == 1) {
+                $response[] = [
+                    'class' => 'badge-primary',
+                    'text' => $parts[0]
+                ];
+            } elseif (count($parts) == 2) {
+                $response[] = [
+                    'class' => 'badge-' . $this->selectColorBadge(trim($parts[0])),
+                    'text' => $parts[1]
+                ];
+            }
+        }
+        return $response;
+    }
+
+    protected function selectColorBadge($parm)
+    {
+        switch ($parm) {
+            case 'red':
+                return 'danger';
+            case 'silver':
+                return 'secondary';
+            case 'green':
+                return 'success';
+            case 'orange':
+                return 'warning';
+            case 'blue':
+            default:
+                return 'primary';
+        }
+    }
+
+    protected function formatTaskStatus($task, $userId)
+    {
+        $solution = $this->getSolutionByTask($task->id, $userId);
+        if (!$solution) {
+            return [$this->selectColorBadge('red'),'Pending'];
+        } elseif ($solution->status === Solution::STATUS_SUBMITTED) {
+            return [$this->selectColorBadge('silver'),'Submitted'];
+        } else {
+            return [$this->selectColorBadge('blue'),'In Progress'];
+        }
+    }
+
+    public function viewTask(Request $request, $id)
+    {
+        $data = $this->getViewTaskSolutionData($id, null, $request->user()->id);
 
         return view('participant.main.view-task', $data);
     }
@@ -67,81 +126,31 @@ class IndexController extends Controller
 
 
 
-    public function viewTask2($id)
-    {
-        $task = Task::findOrFail($id);
-
-        $parsedown = new \ParsedownExtra();
-        $task->description = $parsedown->text($task->description);
-
-        $solution = [
-            'id' => 1,
-            'statusTitle' => 'Not started',
-            'description' => '# Here is the title {.hdr1}
-And now some description...
-            '
-        ];
-
-        $solution['description'] = $parsedown->text($solution['description']);
-
-        $data = [
-            'task' => $task,
-            'solution' => $solution,
-            'itemSolutions' => []
-        ];
-
-        $data['itemSolutions'][] = [
-            'id' => 1,
-            'title' => 'create table X',
-            'description' => 'Create the migration',
-            'links' => []
-        ];
-
-        $data['itemSolutions'][] = [
-            'id' => 2,
-            'title' => 'create route for endpoint',
-            'description' => 'Create the rount on file X. This is a long description to verify how it will work with the buttons on this current layout. Lets see if it will break the lines accordingly. Create the rount on file X. This is a long description to verify how it will work with the buttons on this current layout. Lets see if it will break the lines accordingly.Create the rount on file X. This is a long description to verify how it will work with the buttons on this current layout. Lets see if it will break the lines accordingly.'
-            ,
-            'links' => []
-        ];
-
-        $data['itemSolutions'][] = [
-            'id' => 3,
-            'title' => 'create route for endpoint',
-            'description' => 'Create the rount on file X',
-            'links' => [
-                [
-                    'title' => 'My image',
-                    'description' => '',
-                    'url' => 'https://x.com/mylink.png',
-                    'type' => 'image'
-                ],
-                [
-                    'title' => 'My PDF',
-                    'description' => '',
-                    'url' => 'https://x.com/mylink.pdf',
-                    'type' => 'document'
-                ],
-            ]
-        ];
-
-        return view('participant.main.view-task', $data);
-    }
 
     public function getTask($id)
     {
         $task = Task::findOrFail($id);
 
-        $parsedown = new \ParsedownExtra();
-        $task->description = $parsedown->text($task->description);
+        $task->description = $this->renderMarkdown($task->description);
 
         return $task;
     }
 
-    public function getSolutionByTask($taskId)
+    protected function renderMarkdown($text)
+    {
+        $parsedown = new \ParsedownExtra();
+        $response = $parsedown->text($text);
+
+        $response = preg_replace('/<a(.*)>/m', '<a target="_blank" ${1} >', $response);
+
+        return $response ;
+    }
+
+    public function getSolutionByTask($taskId, $userId)
     {
         try {
             $solution = Solution::where('task_id', $taskId)
+                ->where('user_id', $userId)
                 ->firstOrFail();
         } catch (\Exception $e) {
             $solution = null;
@@ -181,7 +190,6 @@ And now some description...
         return redirect()
             ->route('show-solution', ['solutionId' => $solutionId])
             ->with('flash_message', 'Item Solution added!');
-        // return redirect('solution/' . $solutionId)->with('flash_message', 'Item Solution added!');
     }
 
     public function updateSolution(Request $request, $solutionId)
@@ -197,15 +205,17 @@ And now some description...
 
     public function viewSolution(Request $request, $solutionId)
     {
-        $data = $this->getViewTaskSolutionData(null, $solutionId);
+        $data = $this->getViewTaskSolutionData(null, $solutionId, $request->user()->id);
 
         return view('participant.main.view-task', $data);
     }
 
-    protected function getViewTaskSolutionData($taskId=null, $solutionId=null)
+    protected function getViewTaskSolutionData($taskId=null, $solutionId=null, $userId=null)
     {
+        $itemSolutions = [];
+
         if ($taskId) {
-            $solution = $this->getSolutionByTask($taskId);
+            $solution = $this->getSolutionByTask($taskId, $userId);
         } else {
             $solution = $this->getSolution($solutionId);
         }
@@ -215,9 +225,8 @@ And now some description...
             $task = $this->getTask($taskId);
         } else {
             $task = $this->getTask($solution->task_id);
+            $itemSolutions = ItemSolution::where('solution_id', $solution->id)->get();
         }
-
-        $itemSolutions = ItemSolution::where('solution_id', $solution->id)->get();
 
 
         $data = [
@@ -254,7 +263,7 @@ And now some description...
         if (!$itemSolution) {
             return redirect()
             ->route('show-solution', ['solutionId' => $solutionId])
-            ->with('flash_message', 'Invali item $itemId');
+            ->with('flash_message', 'Invalid item $itemId');
         }
 
         return view('participant.main.edit-item-solution', [
@@ -281,7 +290,7 @@ And now some description...
         if (!$itemSolution) {
             return redirect()
             ->route('show-solution', ['solutionId' => $solutionId])
-            ->with('flash_message', 'Invali item $itemId');
+            ->with('flash_message', 'Invalid item $itemId');
         }
 
         $itemSolution->update($requestData);
@@ -293,17 +302,71 @@ And now some description...
     {
         ItemSolution::destroy($itemId);
 
-        // $requestData = $request->all();
-        // $itemSolution = $this->getItemSolution($solutionId, $itemId);
-
-        // if (!$itemSolution) {
-        //     return redirect()
-        //     ->route('show-solution', ['solutionId' => $solutionId])
-        //     ->with('flash_message', 'Invali item $itemId');
-        // }
-
-        // $itemSolution->delete();
-
         return redirect()->route('show-solution', ['solutionId'=>$solutionId])->with('flash_message', 'Item Solution removed!');
+    }
+
+    public function showFormCreateLinkItemSolution(Request $request, $solutionId, $itemId)
+    {
+        return view('participant.main.create-link-item-solution', [
+            'solutionId' => $solutionId,
+            'itemId' => $itemId
+        ]);
+    }
+
+    public function storeLinkItemSolution(Request $request, $solutionId, $itemId)
+    {
+        $this->validate($request, [
+            'item_solution_id' => 'required',
+            'url' => 'required'
+        ]);
+        $requestData = $request->all();
+
+        if ($requestData['item_solution_id'] != $itemId) {
+            throw new \Exception("Mismatch item ID: $itemId != ".$requestData['item_solution_id']);
+        }
+
+        ItemSolutionLink::create($requestData);
+
+        return redirect()
+            ->route('show-solution', ['solutionId' => $solutionId])
+            ->with('flash_message', 'Item Solution added!');
+    }
+
+    public function removeLinkItemSolution(Request $request, $solutionId, $itemId, $linkId)
+    {
+        ItemSolutionLink::destroy($linkId);
+        return redirect()->route('show-solution', ['solutionId'=>$solutionId])->with('flash_message', 'Item Solution removed!');
+    }
+
+    public function showFormEditLinkItemSolution(Request $request, $solutionId, $itemId, $linkId)
+    {
+        $linkItemSolution = ItemSolutionLink::find($linkId);
+
+        if (!$linkItemSolution) {
+            return redirect()
+            ->route('show-solution', ['solutionId' => $solutionId])
+            ->with('flash_message', 'Invalid link $linkItemSolution');
+        }
+
+        return view('participant.main.edit-link-item-solution', [
+            'linkItemSolution' => $linkItemSolution,
+            'solutionId' => $solutionId,
+            'itemId' => $itemId,
+            'linkId' => $linkId
+        ]);
+    }
+
+    public function updateLinkItemSolution(Request $request, $solutionId, $itemId, $linkId)
+    {
+        $this->validate($request, [
+            'url' => 'required'
+        ]);
+        $requestData = $request->all();
+        $requestData['item_solution_id'] = $itemId;
+
+        $itemsolutionlink = ItemSolutionLink::findOrFail($linkId);
+        $itemsolutionlink->update($requestData);
+
+        return redirect()->route('show-solution', ['solutionId'=>$solutionId])->with('flash_message', 'Item Solution updated!');
     }
 }

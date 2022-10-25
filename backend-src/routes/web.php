@@ -60,6 +60,20 @@ Route::get('/solution/{solutionId}/item/create', '\App\Http\Controllers\Particip
 Route::post('/solution/{solutionId}/item/create', '\App\Http\Controllers\Participant\IndexController@storeItemSolution')
 ->middleware(['auth', 'verified'])->name('create-item-solution');
 
+Route::get('/solution/{solutionId}/item/{itemId}/link/create', '\App\Http\Controllers\Participant\IndexController@showFormCreateLinkItemSolution')
+->middleware(['auth', 'verified']);
+
+Route::post('/solution/{solutionId}/item/{itemId}/link', '\App\Http\Controllers\Participant\IndexController@storeLinkItemSolution')
+->middleware(['auth', 'verified']);
+
+Route::delete('/solution/{solutionId}/item/{itemId}/link/{linkId}', '\App\Http\Controllers\Participant\IndexController@removeLinkItemSolution')
+->middleware(['auth', 'verified']);
+
+Route::get('/solution/{solutionId}/item/{itemId}/link/{linkId}', '\App\Http\Controllers\Participant\IndexController@showFormEditLinkItemSolution')
+->middleware(['auth', 'verified']);
+
+Route::post('/solution/{solutionId}/item/{itemId}/link/{linkId}', '\App\Http\Controllers\Participant\IndexController@updateLinkItemSolution')
+->middleware(['auth', 'verified']);
 
 
 require __DIR__.'/auth.php';

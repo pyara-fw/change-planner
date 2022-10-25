@@ -39,4 +39,9 @@ class ItemSolution extends Model
         $parsedown = new \ParsedownExtra();
         return $parsedown->text($this->description);
     }
+
+    public function links()
+    {
+        return $this->hasMany(ItemSolutionLink::class);
+    }
 }
