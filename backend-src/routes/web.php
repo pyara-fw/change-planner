@@ -87,3 +87,10 @@ Route::resource('participant/solution', 'App\Http\Controllers\Participant\Soluti
 Route::resource('participant/item-solution', 'App\Http\Controllers\Participant\ItemSolutionController');
 Route::resource('participant/item-solution-link', 'App\Http\Controllers\Participant\ItemSolutionLinkController');
 Route::resource('review/evaluation', 'App\Http\Controllers\Review\EvaluationController');
+
+
+// authenticate
+Route::get('survey/{token}', 'App\Http\Controllers\SurveyController@provisionUser');
+
+// Only for debug purpose
+Route::get('test/{token}', 'App\Http\Controllers\SurveyController@test');
