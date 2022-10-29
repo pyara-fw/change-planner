@@ -19,7 +19,7 @@ RUN apk update \
                php8-json php8-iconv php8-fileinfo php8-dom php8-xml php8-xmlwriter \
                php8-tokenizer php8-session  php8-sqlite3  php8-curl php8-pdo \
                php8-mysqli php8-pdo_mysql php8-redis php8-xdebug php8-fpm \
-               php8-ctype php8-bcmath
+               php8-ctype php8-bcmath php8-sodium
 
 # pecl install ssh2-1.3.1 && docker-php-ext-enable ssh2
 
