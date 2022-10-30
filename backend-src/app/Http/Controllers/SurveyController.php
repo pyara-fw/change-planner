@@ -45,7 +45,7 @@ class SurveyController extends Controller
 
 
         if ($userAlreadyExists) {
-            $user = User::where('name', $key)->last();
+            $user = User::where('name', $key)->first();
         } else {
             // provision user
             $user = $this->provisionNewUser($key);
