@@ -2,16 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Auth\LoginRequest;
 use App\Models\SurveyKey;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use App\Models\User;
-
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-// use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response;
 
 class SurveyController extends Controller
@@ -57,8 +54,6 @@ class SurveyController extends Controller
         session()->regenerate();
 
         return redirect()->intended(RouteServiceProvider::HOME);
-
-        // return ['msg'=>'ok', 'key'=>$key];
     }
 
     protected function storeToken($key)
@@ -90,7 +85,6 @@ class SurveyController extends Controller
     {
         $email = "$key@experiment.pyara.org";
         $password = random_bytes(10);
-
 
         $user = User::create([
             'name' => $key,
