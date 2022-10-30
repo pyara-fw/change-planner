@@ -33,20 +33,24 @@ class SurveyController extends Controller
             return $response;
         }
 
+        $userAlreadyExists = false;
         // store this key on local DB
         try {
             $this->storeToken($key);
         } catch (\Illuminate\Database\QueryException $ex) {
-            return "Sorry, but this token was already used...";
+            $userAlreadyExists = true;
         } catch (\Exception $ex) {
             return ['msg' => $ex->getMessage()];
         }
 
 
-        // provision user
-        $user = $this->provisionNewUser($key);
-
-        event(new Registered($user));
+        if ($userAlreadyExists) {
+            $user = User::where('name', $key)->last();
+        } else {
+            // provision user
+            $user = $this->provisionNewUser($key);
+            event(new Registered($user));
+        }
 
         Auth::login($user);
 
