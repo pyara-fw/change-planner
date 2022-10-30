@@ -67,27 +67,6 @@ class SurveyController extends Controller
         SurveyKey::create($data);
     }
 
-    // public function test(Request $request, $key)
-    // {
-    //     $keyPair  = [
-    //         'secret' => env('KEY_SECRET'),
-    //         'public' => env('KEY_PUBLIC')
-    //     ];
-
-    //     $keyPairBin = [
-    //         'secret' => hex2bin($keyPair['secret']),
-    //         'public' => hex2bin($keyPair['public']),
-    //     ];
-
-    //     $signedBin = \sodium_crypto_sign($key, $keyPairBin['secret']);
-    //     $token = \bin2hex($signedBin);
-
-    //     return [
-    //         'key' => $key,
-    //         'token' => $token
-    //     ];
-    // }
-
 
     protected function validateAndGetKey($token)
     {
@@ -106,55 +85,6 @@ class SurveyController extends Controller
         return $key;
     }
 
-    /**
-     * Receive a token and create a session
-     *
-     * @param Request $request
-     * @param [type] $token
-     * @return void
-     */
-    // public function authenticate(Request $request, $token)
-    // {
-    //     $keyPair  = [
-    //         'secret' => env('KEY_SECRET'),
-    //         'public' => env('KEY_PUBLIC')
-    //     ];
-
-    //     $keyPairBin = [
-    //         'secret' => hex2bin($keyPair['secret']),
-    //         'public' => hex2bin($keyPair['public']),
-    //     ];
-
-
-    //     // userId : random payload : signature
-    //     $userId = '1';
-    //     $random = \bin2hex(\random_bytes(10));
-    //     $input = "$userId:$random";
-    //     $signedBin = \sodium_crypto_sign($input, $keyPairBin['secret']);
-    //     $signedText = \bin2hex($signedBin);
-
-    //     $receivedSignedText = $signedText;
-
-    //     // $receivedSignedText .= '00';
-
-    //     $decodedBin = \hex2bin($receivedSignedText);
-    //     $output = \sodium_crypto_sign_open($decodedBin, $keyPairBin['public']);
-
-
-    //     $response  = [
-    //         'input' => $input,
-    //         'signedText' => $signedText,
-    //         'output' => $output
-    //     ];
-    //     if ($output) {
-    //         session()->regenerate();
-    //         return redirect()->intended(RouteServiceProvider::HOME);
-    //     }
-
-
-    //     //dd($input);
-    //     return $response;
-    // }
 
     public function provisionNewUser(string $key)
     {
