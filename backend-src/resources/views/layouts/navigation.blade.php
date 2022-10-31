@@ -15,8 +15,8 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link href="admin/project" >
-                        {{ __('Projects') }}
+                    <x-nav-link href="https://www.wiki.pyara.org" >
+                        {{ __('Help') }}
                     </x-nav-link>
                 </div>
             </div>
