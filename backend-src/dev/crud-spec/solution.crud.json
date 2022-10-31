@@ -1,0 +1,54 @@
+{
+    "fields": [
+        {
+            "name": "description",
+            "type": "text",
+            "is_markdown": true,
+            "skip_index_list": true
+        },
+        {
+            "name": "task_id",
+            "type": "integer#unsigned"
+        },
+        {
+            "name": "user_id",
+            "type": "bigint#unsigned"
+        }
+    ],
+    "foreign_keys": [
+        {
+            "column": "task_id",
+            "references": "id",
+            "on": "tasks",
+            "onDelete": "cascade"
+        },
+        {
+            "column": "user_id",
+            "references": "id",
+            "on": "users",
+            "onDelete": "cascade"
+        }
+    ],
+    "relationships": [
+        {
+            "name": "assigned_to",
+            "type": "belongsTo",
+            "class": "App\\Models\\User"
+        },
+        {
+            "name": "task",
+            "type": "belongsTo",
+            "class": "App\\Models\\Task"
+        }
+    ],
+    "validations": [
+        {
+            "field": "user_id",
+            "rules": "required"
+        },
+        {
+            "field": "task_id",
+            "rules": "required"
+        }
+    ]
+}

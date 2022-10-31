@@ -1,0 +1,39 @@
+{
+    "fields": [
+        {
+            "name": "title",
+            "type": "string"
+        },
+        {
+            "name": "description",
+            "type": "text",
+            "is_markdown": true,
+            "skip_index_list": true
+        },
+        {
+            "name": "solution_id",
+            "type": "integer#unsigned"
+        }
+    ],
+    "foreign_keys": [
+        {
+            "column": "solution_id",
+            "references": "id",
+            "on": "solutions",
+            "onDelete": "cascade"
+        }
+    ],
+    "relationships": [
+        {
+            "name": "solution",
+            "type": "belongsTo",
+            "class": "App\\Models\\Solution"
+        }
+    ],
+    "validations": [
+        {
+            "field": "solution_id",
+            "rules": "required"
+        }
+    ]
+}

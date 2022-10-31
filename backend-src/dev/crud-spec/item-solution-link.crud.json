@@ -1,0 +1,58 @@
+{
+    "fields": [
+        {
+            "name": "title",
+            "type": "string"
+        },
+        {
+            "name": "description",
+            "type": "text",
+            "is_markdown": true,
+            "skip_index_list": true
+        },
+        {
+            "name": "url",
+            "type": "string"
+        },
+        {
+            "name": "item_solution_id",
+            "type": "integer#unsigned"
+        },
+        {
+            "name": "type",
+            "type": "select",
+            "options": {
+                "image": "Image",
+                "document": "Document",
+                "video": "Video",
+                "external": "External page",
+                "other": "Other"
+            }
+        }
+    ],
+    "foreign_keys": [
+        {
+            "column": "item_solution_id",
+            "references": "id",
+            "on": "item_solutions",
+            "onDelete": "cascade"
+        }
+    ],
+    "relationships": [
+        {
+            "name": "item_solution",
+            "type": "belongsTo",
+            "class": "App\\Models\\ItemSolution"
+        }
+    ],
+    "validations": [
+        {
+            "field": "item_solution_id",
+            "rules": "required"
+        },
+        {
+            "field": "url",
+            "rules": "required"
+        }
+    ]
+}

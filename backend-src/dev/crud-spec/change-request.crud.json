@@ -1,0 +1,87 @@
+{
+    "fields": [
+        {
+            "name": "title",
+            "type": "string"
+        },
+        {
+            "name": "description",
+            "type": "text",
+            "is_markdown": true,
+            "skip_index_list": true
+        },
+        {
+            "name": "project_id",
+            "type": "integer#unsigned"
+        },
+        {
+            "name": "reporter_user_id",
+            "type": "bigint#unsigned"
+        },
+        {
+            "name": "assigned_user_id",
+            "type": "bigint#unsigned"
+        },
+        {
+            "name": "status",
+            "type": "select",
+            "options": {
+                "1": "Pending",
+                "2": "Executing",
+                "3": "Planned",
+                "4": "Cancelled"
+            }
+        }
+    ],
+    "foreign_keys": [
+        {
+            "column": "project_id",
+            "references": "id",
+            "on": "projects",
+            "onDelete": "cascade"
+        },
+        {
+            "column": "reporter_user_id",
+            "references": "id",
+            "on": "users",
+            "onDelete": "cascade"
+        },
+        {
+            "column": "assigned_user_id",
+            "references": "id",
+            "on": "users",
+            "onDelete": "cascade"
+        }
+    ],
+    "relationships": [
+        {
+            "name": "assigned_to",
+            "type": "belongsTo",
+            "class": "App\\Models\\User"
+        },
+        {
+            "name": "reported_by",
+            "type": "belongsTo",
+            "class": "App\\Models\\User"
+        },
+        {
+            "name": "project",
+            "type": "belongsTo",
+            "class": "App\\Models\\Project"
+        }
+    ],
+    "validations": [
+        {
+            "field": "title",
+            "rules": "required"
+        },
+        {
+            "field": "project_id",
+            "rules": "required"
+        },
+        {
+            "field": "status",
+            "rules": "required"
+        }
+    ]
+}
