@@ -39,5 +39,27 @@
     </div>
 
 
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle" style="font-size:larger;font-weight:bolder">Congrats, you finished all tasks!</h5>
+      </div>
+      <div class="modal-body">
+        Now, please fill this last survey.
+      </div>
+      <div class="modal-footer">
+        <a href="{{ $postSurveyURL }}" class="btn btn-primary">Survey</a>
+      </div>
+    </div>
+  </div>
+</div>
+@if (isset($statusCount['Pending']) || isset($statusCount['In Progress']))
+    @else
+    <script>
+        $('#exampleModalCenter').modal('show');
+    </script>
+    @endif
+
     @endsection
 </x-app-layout>

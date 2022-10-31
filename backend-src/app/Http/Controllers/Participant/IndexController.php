@@ -10,6 +10,7 @@ use App\Models\ItemSolution;
 use App\Models\ItemSolutionLink;
 use App\Models\Solution;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Parsedown;
 
@@ -30,12 +31,21 @@ class IndexController extends Controller
         ];
 
 
+        $countStatus = [];
         foreach ($tasks as $item) {
             $item->description = $this->renderMarkdown($item->description);
             $item->formattedTags = $this->formatTags($item->tags);
             $item->formattedStatus = $this->formatTaskStatus($item, $request->user()->id);
             $data['tasks'][] = $item;
+            if (!isset($countStatus[$item->formattedStatus[1]])) {
+                $countStatus[$item->formattedStatus[1]] = 0;
+            }
+            $countStatus[$item->formattedStatus[1]]++;
         }
+        $data['statusCount'] = $countStatus;
+        $data['postSurveyURL'] = env('POST_SURVEY_URL') .Auth::user()->name;
+
+
 
         return view('dashboard', $data);
     }
